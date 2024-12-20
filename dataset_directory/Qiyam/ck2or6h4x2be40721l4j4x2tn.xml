@@ -1,0 +1,26 @@
+<annotation>
+    <folder>From_Labelbox</folder>
+    <filename>ck2or6h4x2be40721l4j4x2tn.jpeg</filename>
+    <path>/home/riotu/Object Detection/Datasets/Salat/From_Labelbox/ck2or6h4x2be40721l4j4x2tn.jpeg</path>
+    <source>
+        <database>Unknown</database>
+    </source>
+    <size>
+        <width>480</width>
+        <height>360</height>
+        <depth>3</depth>
+    </size>
+    <segmented>0</segmented>
+    <object>
+        <name>qiyam</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+                <xmin>123</xmin>
+                <ymin>43</ymin>
+                <xmax>215</xmax>
+                <ymax>316</ymax>
+            </bndbox>
+        </object>
+    </annotation>

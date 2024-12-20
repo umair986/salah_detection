@@ -1,0 +1,30 @@
+<annotation>
+    <folder>From_Labelbox</folder>
+    <filename>ck2orag7d50hh0757qpw5foio.jpeg</filename>
+    <path>/home/riotu/Object Detection/Datasets/Salat/From_Labelbox/ck2orag7d50hh0757qpw5foio.jpeg</path>
+    <source>
+        <database>Unknown</database>
+    </source>
+    <size>
+        <width>368</width>
+        <height>487</height>
+        <depth>3</depth>
+    </size>
+    <segmented>0</segmented>
+    <object>
+        <name>ruku</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <polygon>
+            <x1>65</x1>
+                <y1>40</y1>
+            <x2>66</x2>
+                <y2>469</y2>
+            <x3>322</x3>
+                <y3>469</y3>
+            <x4>322</x4>
+                <y4>40</y4>
+            </polygon>
+        </object>
+    </annotation>

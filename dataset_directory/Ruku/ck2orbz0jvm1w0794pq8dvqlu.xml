@@ -1,0 +1,26 @@
+<annotation>
+    <folder>From_Labelbox</folder>
+    <filename>ck2orbz0jvm1w0794pq8dvqlu.jpeg</filename>
+    <path>/home/riotu/Object Detection/Datasets/Salat/From_Labelbox/ck2orbz0jvm1w0794pq8dvqlu.jpeg</path>
+    <source>
+        <database>Unknown</database>
+    </source>
+    <size>
+        <width>960</width>
+        <height>1280</height>
+        <depth>3</depth>
+    </size>
+    <segmented>0</segmented>
+    <object>
+        <name>ruku</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+                <xmin>293</xmin>
+                <ymin>466</ymin>
+                <xmax>714</xmax>
+                <ymax>1040</ymax>
+            </bndbox>
+        </object>
+    </annotation>
