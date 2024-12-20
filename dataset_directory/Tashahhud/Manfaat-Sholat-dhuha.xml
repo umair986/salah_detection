@@ -1,0 +1,26 @@
+<annotation>
+	<folder>photo</folder>
+	<filename>Manfaat-Sholat-dhuha.jpg</filename>
+	<path>/Users/mohandbaras/Desktop/photo/Manfaat-Sholat-dhuha.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>944</width>
+		<height>528</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>sitting</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>337</xmin>
+			<ymin>38</ymin>
+			<xmax>637</xmax>
+			<ymax>495</ymax>
+		</bndbox>
+	</object>
+</annotation>

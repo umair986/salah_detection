@@ -1,196 +1,363 @@
+import numpy as np
 import cv2
 import mediapipe as mp
-import numpy as np
+from enum import Enum
+import json
+from datetime import datetime
+from collections import deque
 
-# MediaPipe Holistic Setup
-mp_holistic = mp.solutions.holistic
-mp_pose = mp.solutions.pose
-holistic = mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5)
+class PrayerPose(Enum):
+    NIYYAH = "Niyyah"
+    TAKBIR = "Takbir"
+    QIYAM = "Qiyam"
+    RUKU = "Ruku"
+    ITIDAL = "Itidal"
+    SUJUD = "Sujud"
+    JALSA = "Jalsa"
+    TASHAHHUD = "Tashahhud"
+    SALAM_RIGHT = "Salam Right"
+    SALAM_LEFT = "Salam Left"
+    UNKNOWN = "Unknown"
 
-# Landmark Mapping
-LANDMARK_MAPPING = {
-    "NOSE": mp_pose.PoseLandmark.NOSE,
-    "LEFT_EAR": mp_pose.PoseLandmark.LEFT_EAR,
-    "RIGHT_EAR": mp_pose.PoseLandmark.RIGHT_EAR,
-    "LEFT_SHOULDER": mp_pose.PoseLandmark.LEFT_SHOULDER,
-    "RIGHT_SHOULDER": mp_pose.PoseLandmark.RIGHT_SHOULDER,
-    "LEFT_ELBOW": mp_pose.PoseLandmark.LEFT_ELBOW,
-    "RIGHT_ELBOW": mp_pose.PoseLandmark.RIGHT_ELBOW,
-    "LEFT_WRIST": mp_pose.PoseLandmark.LEFT_WRIST,
-    "RIGHT_WRIST": mp_pose.PoseLandmark.RIGHT_WRIST,
-    "LEFT_HIP": mp_pose.PoseLandmark.LEFT_HIP,
-    "RIGHT_HIP": mp_pose.PoseLandmark.RIGHT_HIP,
-    "LEFT_KNEE": mp_pose.PoseLandmark.LEFT_KNEE,
-    "RIGHT_KNEE": mp_pose.PoseLandmark.RIGHT_KNEE,
-    "LEFT_ANKLE": mp_pose.PoseLandmark.LEFT_ANKLE,
-    "RIGHT_ANKLE": mp_pose.PoseLandmark.RIGHT_ANKLE
-}
+class NamazPoseDetector:
+    def _init_(self, confidence_threshold=0.3):
+        self.mp_pose = mp.solutions.pose
+        self.pose = self.mp_pose.Pose(
+            min_detection_confidence=0.5,
+            min_tracking_confidence=0.5,
+            model_complexity=2
+        )
+        self.confidence_threshold = confidence_threshold
+        self.pose_history = deque(maxlen=30)
+        self.current_sequence = []
+        self.debug_data = []
+        self.debug_info = {}
 
-# Updated Posture Definitions with More Comprehensive Detection
-postures = {
-    "Niyyah": {
-        "HEAD": {"threshold": (0.4, 0.6), "weight": 1.0},
-        "NOSE": {"threshold": (0.4, 0.6), "weight": 1.0}
-    },
-    "Takbir": {
-        "LEFT_SHOULDER": {"threshold": (0.3, 0.7), "weight": 1.0},
-        "RIGHT_SHOULDER": {"threshold": (0.3, 0.7), "weight": 1.0},
-        "LEFT_ELBOW": {"threshold": (0.4, 0.6), "weight": 1.0},
-        "RIGHT_ELBOW": {"threshold": (0.4, 0.6), "weight": 1.0}
-    },
-    "Qiyam": {
-        "LEFT_SHOULDER": {"threshold": (0.40, 0.60), "weight": 1.0},
-        "RIGHT_SHOULDER": {"threshold": (0.40, 0.60), "weight": 1.0},
-        "LEFT_HIP": {"threshold": (0.50, 0.70), "weight": 1.0},
-        "RIGHT_HIP": {"threshold": (0.50, 0.70), "weight": 1.0},
-        "LEFT_ANKLE": {"threshold": (0.50, 0.70), "weight": 1.0},
-        "RIGHT_ANKLE": {"threshold": (0.50, 0.70), "weight": 1.0}
-    },
-    "Ruku": {
-        "LEFT_SHOULDER": {"threshold": (0.20, 0.40), "weight": 1.2},  
-        "RIGHT_SHOULDER": {"threshold": (0.20, 0.40), "weight": 1.2},
-        "LEFT_HIP": {"threshold": (0.30, 0.50), "weight": 1.0},
-        "RIGHT_HIP": {"threshold": (0.30, 0.50), "weight": 1.0},
-        "LEFT_KNEE": {"threshold": (0.60, 0.80), "weight": 1.0},
-        "RIGHT_KNEE": {"threshold": (0.60, 0.80), "weight": 1.0}
-    },
-    "I'tidal": {
-        "LEFT_SHOULDER": {"threshold": (0.40, 0.60), "weight": 1.0},
-        "RIGHT_SHOULDER": {"threshold": (0.40, 0.60), "weight": 1.0},
-        "LEFT_HIP": {"threshold": (0.50, 0.70), "weight": 1.0},
-        "RIGHT_HIP": {"threshold": (0.50, 0.70), "weight": 1.0}
-    },
-    "Sujud": {
-        "NOSE": {"threshold": (0.10, 0.30), "weight": 1.5},
-        "LEFT_WRIST": {"threshold": (0.10, 0.30), "weight": 1.0},
-        "RIGHT_WRIST": {"threshold": (0.10, 0.30), "weight": 1.0},
-        "LEFT_ANKLE": {"threshold": (0.10, 0.30), "weight": 1.0},
-        "RIGHT_ANKLE": {"threshold": (0.10, 0.30), "weight": 1.0}
-    },
-    "Jalsa": {
-        "LEFT_KNEE": {"threshold": (0.30, 0.50), "weight": 1.0},
-        "RIGHT_KNEE": {"threshold": (0.30, 0.50), "weight": 1.0},
-        "LEFT_HIP": {"threshold": (0.40, 0.60), "weight": 1.0},
-        "RIGHT_HIP": {"threshold": (0.40, 0.60), "weight": 1.0}
-    },
-    "Tashahhud": {
-        "LEFT_KNEE": {"threshold": (0.30, 0.50), "weight": 1.0},
-        "RIGHT_KNEE": {"threshold": (0.30, 0.50), "weight": 1.0},
-        "LEFT_HIP": {"threshold": (0.40, 0.60), "weight": 1.0},
-        "RIGHT_HIP": {"threshold": (0.40, 0.60), "weight": 1.0}
-    },
-    "Salaam": {
-        "LEFT_EAR": {"threshold": (0.40, 0.60), "weight": 1.0},
-        "RIGHT_EAR": {"threshold": (0.40, 0.60), "weight": 1.0}
-    }
-}
+    def get_3d_landmarks(self, results):
+        """Extract 3D landmarks with confidence filtering."""
+        if not results.pose_world_landmarks:
+            return None
 
-def calculate_angle(a, b, c):
-    """
-    Calculate the angle between three points
-    """
-    a = np.array([a.x, a.y])
-    b = np.array([b.x, b.y])
-    c = np.array([c.x, c.y])
-    
-    radians = np.arctan2(c[1]-b[1], c[0]-b[0]) - np.arctan2(a[1]-b[1], a[0]-b[0])
-    angle = np.abs(radians*180.0/np.pi)
-    
-    if angle > 180.0:
-        angle = 360-angle
+        landmarks_3d = []
+        for landmark in results.pose_world_landmarks.landmark:
+            landmarks_3d.append({
+                'x': landmark.x,
+                'y': landmark.y,
+                'z': landmark.z,
+                'visibility': landmark.visibility
+            })
+        return landmarks_3d
+
+    def classify_pose(self, landmarks_3d):
+        """Classify the prayer pose based on 3D landmarks."""
+        if not landmarks_3d:
+            return PrayerPose.UNKNOWN
+
+        # Reset debug info
+        self.debug_info = {}
+
+        # Check each pose with debug information
+        if self._is_qiyam_position(landmarks_3d):
+            return PrayerPose.QIYAM
+        elif self._is_ruku_position(landmarks_3d):
+            return PrayerPose.RUKU
+        elif self._is_sujud_position(landmarks_3d):
+            return PrayerPose.SUJUD
+        elif self._is_jalsa_position(landmarks_3d):
+            return PrayerPose.JALSA
+        elif self._is_tashahhud_position(landmarks_3d):
+            return PrayerPose.TASHAHHUD
+        elif self._is_niyyah_position(landmarks_3d):
+            return PrayerPose.NIYYAH
+        elif self._is_takbir_position(landmarks_3d):
+            return PrayerPose.TAKBIR
+
+        self.debug_info['pose_classification'] = 'No matching pose found'
+        return PrayerPose.UNKNOWN
+
+    def _is_qiyam_position(self, landmarks_3d):
+        """Check if pose matches Qiyam position (standing with hands folded)."""
+        nose = landmarks_3d[0]
+        left_shoulder = landmarks_3d[11]
+        right_shoulder = landmarks_3d[12]
+        left_wrist = landmarks_3d[15]
+        right_wrist = landmarks_3d[16]
+        left_ankle = landmarks_3d[27]
+        right_ankle = landmarks_3d[28]
+
+        vertical_aligned = abs(left_shoulder['y'] - right_shoulder['y']) < 0.1
         
-    return angle
+        hands_folded = (
+            abs(left_wrist['y'] - right_wrist['y']) < 0.15 and
+            abs(left_wrist['x'] - right_wrist['x']) < 0.2 and
+            left_wrist['y'] < left_shoulder['y'] and
+            right_wrist['y'] < right_shoulder['y']
+        )
 
-def classify_posture(results):
-    """
-    Classify the namaz posture based on body landmarks
-    """
-    if not results.pose_landmarks:
-        return "Unknown", {}
+        standing = (
+            nose['y'] < left_shoulder['y'] < left_ankle['y'] and
+            nose['y'] < right_shoulder['y'] < right_ankle['y']
+        )
 
-    posture_confidences = {}
-    landmarks = results.pose_landmarks.landmark
-    
-    for posture, key_points in postures.items():
-        confidence = 0
-        total_weight = 0
+        self.debug_info['qiyam'] = {
+            'vertical_aligned': vertical_aligned,
+            'hands_folded': hands_folded,
+            'standing': standing
+        }
+
+        return vertical_aligned and hands_folded and standing
+
+    def _is_ruku_position(self, landmarks_3d):
+        """Check if pose matches Ruku position (bowing)."""
+        nose = landmarks_3d[0]
+        left_shoulder = landmarks_3d[11]
+        right_shoulder = landmarks_3d[12]
+        left_hip = landmarks_3d[23]
+        right_hip = landmarks_3d[24]
+        left_ankle = landmarks_3d[27]
+        right_ankle = landmarks_3d[28]
+
+        spine_angle = abs(90 - self._calculate_angle(
+            [left_shoulder['x'], left_shoulder['y']],
+            [left_hip['x'], left_hip['y']],
+            [left_hip['x'] + 1, left_hip['y']]
+        ))
+
+        bending_forward = (
+            nose['y'] > left_shoulder['y'] and
+            nose['y'] > right_shoulder['y'] and
+            left_shoulder['y'] > left_hip['y'] and
+            right_shoulder['y'] > right_hip['y']
+        )
+
+        knees_straight = (
+            left_hip['y'] < left_ankle['y'] and
+            right_hip['y'] < right_ankle['y']
+        )
+
+        self.debug_info['ruku'] = {
+            'spine_angle': spine_angle,
+            'bending_forward': bending_forward,
+            'knees_straight': knees_straight
+        }
+
+        return spine_angle < 30 and bending_forward and knees_straight
+
+    def _is_sujud_position(self, landmarks_3d):
+        """Check if pose matches Sujud position (prostration)."""
+        nose = landmarks_3d[0]
+        left_knee = landmarks_3d[25]
+        right_knee = landmarks_3d[26]
+        left_ankle = landmarks_3d[27]
+        right_ankle = landmarks_3d[28]
+
+        head_low = (
+            nose['y'] > left_knee['y'] and
+            nose['y'] > right_knee['y']
+        )
+
+        knees_bent = (
+            left_knee['y'] > left_ankle['y'] and
+            right_knee['y'] > right_ankle['y']
+        )
+
+        self.debug_info['sujud'] = {
+            'head_low': head_low,
+            'knees_bent': knees_bent
+        }
+
+        return head_low and knees_bent
+
+    def _is_jalsa_position(self, landmarks_3d):
+        """Check if pose matches Jalsa position (sitting between prostrations)."""
+        nose = landmarks_3d[0]
+        left_hip = landmarks_3d[23]
+        right_hip = landmarks_3d[24]
+        left_knee = landmarks_3d[25]
+        right_knee = landmarks_3d[26]
+        left_ankle = landmarks_3d[27]
+        right_ankle = landmarks_3d[28]
+
+        sitting = (
+            left_hip['y'] > left_knee['y'] - 0.1 and
+            right_hip['y'] > right_knee['y'] - 0.1
+        )
+
+        back_straight = (
+            nose['y'] < left_hip['y'] and
+            nose['y'] < right_hip['y']
+        )
+
+        feet_position = (
+            left_ankle['y'] > left_knee['y'] and
+            right_ankle['y'] > right_knee['y']
+        )
+
+        self.debug_info['jalsa'] = {
+            'sitting': sitting,
+            'back_straight': back_straight,
+            'feet_position': feet_position
+        }
+
+        return sitting and back_straight and feet_position
+
+    def _is_tashahhud_position(self, landmarks_3d):
+        """Check if pose matches Tashahhud position (final sitting)."""
+        basic_sitting = self._is_jalsa_position(landmarks_3d)
         
-        for point, params in key_points.items():
-            # Get the landmark index from MediaPipe
-            landmark_index = LANDMARK_MAPPING.get(point)
-            if landmark_index is None:
-                continue
-            
-            landmark = landmarks[landmark_index]
-            
-            # Modify confidence calculation to be more robust
-            landmark_conf = landmark.visibility
-            if params["threshold"][0] <= landmark_conf <= params["threshold"][1]:
-                confidence += params.get("weight", 1.0)
-            total_weight += params.get("weight", 1.0)
+        right_wrist = landmarks_3d[16]
+        right_thumb = landmarks_3d[22]
         
-        posture_confidences[posture] = confidence / total_weight if total_weight > 0 else 0
+        finger_raised = (
+            right_thumb['y'] < right_wrist['y']
+        )
+
+        self.debug_info['tashahhud'] = {
+            'basic_sitting': basic_sitting,
+            'finger_raised': finger_raised
+        }
+
+        return basic_sitting and finger_raised
+
+    def _is_niyyah_position(self, landmarks_3d):
+        """Check if pose matches Niyyah position (standing with intention)."""
+        nose = landmarks_3d[0]
+        left_shoulder = landmarks_3d[11]
+        right_shoulder = landmarks_3d[12]
+        left_wrist = landmarks_3d[15]
+        right_wrist = landmarks_3d[16]
+        left_ankle = landmarks_3d[27]
+        right_ankle = landmarks_3d[28]
+
+        standing = (
+            nose['y'] < left_shoulder['y'] < left_ankle['y'] and
+            nose['y'] < right_shoulder['y'] < right_ankle['y']
+        )
+
+        hands_by_sides = (
+            abs(left_wrist['x'] - left_shoulder['x']) < 0.2 and
+            abs(right_wrist['x'] - right_shoulder['x']) < 0.2 and
+            left_wrist['y'] > left_shoulder['y'] and
+            right_wrist['y'] > right_shoulder['y']
+        )
+
+        self.debug_info['niyyah'] = {
+            'standing': standing,
+            'hands_by_sides': hands_by_sides
+        }
+
+        return standing and hands_by_sides
+
+    def _is_takbir_position(self, landmarks_3d):
+        """Check if pose matches Takbir position (raising hands to ears)."""
+        nose = landmarks_3d[0]
+        left_shoulder = landmarks_3d[11]
+        right_shoulder = landmarks_3d[12]
+        left_wrist = landmarks_3d[15]
+        right_wrist = landmarks_3d[16]
+        left_ear = landmarks_3d[7]
+        right_ear = landmarks_3d[8]
+
+        hands_raised = (
+            abs(left_wrist['y'] - left_ear['y']) < 0.15 and
+            abs(right_wrist['y'] - right_ear['y']) < 0.15
+        )
+
+        back_straight = (
+            nose['y'] < left_shoulder['y'] and
+            nose['y'] < right_shoulder['y']
+        )
+
+        hands_apart = (
+            abs(left_wrist['x'] - right_wrist['x']) > 0.3
+        )
+
+        self.debug_info['takbir'] = {
+            'hands_raised': hands_raised,
+            'back_straight': back_straight,
+            'hands_apart': hands_apart
+        }
+
+        return hands_raised and back_straight and hands_apart
+
+    def _calculate_angle(self, p1, p2, p3):
+        """Calculate angle between three points."""
+        a = np.array(p1)
+        b = np.array(p2)
+        c = np.array(p3)
+        
+        ba = a - b
+        bc = c - b
+        
+        cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
+        angle = np.arccos(cosine_angle)
+        
+        return np.degrees(angle)
+
+    def process_frame(self, frame):
+        """Process a single frame and return pose landmarks."""
+        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        results = self.pose.process(frame_rgb)
+        return results
+
+def draw_visualization(frame, results, current_pose, debug_info):
+    """Draw pose landmarks and debug information on the frame."""
+    # Draw pose landmarks
+    mp.solutions.drawing_utils.draw_landmarks(
+        frame,
+        results.pose_landmarks,
+        mp.solutions.pose.POSE_CONNECTIONS,
+        mp.solutions.drawing_utils.DrawingSpec(color=(0, 255, 0), thickness=2, circle_radius=2),
+        mp.solutions.drawing_utils.DrawingSpec(color=(0, 0, 255), thickness=2)
+    )
     
-    # Determine the most likely posture
-    most_likely_posture = max(posture_confidences, key=posture_confidences.get)
-    return most_likely_posture, posture_confidences
+    # Draw pose name
+    cv2.putText(frame, f"Detected Pose: {current_pose.value}", 
+                (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+    
+    # Draw debug information
+    y_pos = 60
+    for pose_name, conditions in debug_info.items():
+        if isinstance(conditions, dict):  # Check if conditions is a dictionary
+            cv2.putText(frame, f"{pose_name}:", 
+                       (10, y_pos), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1)
+            y_pos += 25
+            for condition, value in conditions.items():
+                color = (0, 255, 0) if value else (0, 0, 255)
+                cv2.putText(frame, f"  {condition}: {value}", 
+                           (10, y_pos), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+                y_pos += 20
+    
+    return frame
 
 def main():
-    cap = cv2.VideoCapture(0)  
+    detector = NamazPoseDetector()
+    cap = cv2.VideoCapture(0)
+    
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
     
     while cap.isOpened():
-        success, image = cap.read()
-        if not success:
-            print("Ignoring empty camera frame.")
-            continue
-        
-        # Convert the BGR image to RGB
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        
-        # To improve performance, optionally mark the image as not writeable
-        image.flags.writeable = False
-        results = holistic.process(image)
-        
-        # Draw the pose annotation on the image
-        image.flags.writeable = True
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-        
-        # Draw landmarks
-        mp_drawing = mp.solutions.drawing_utils
-        mp_drawing.draw_landmarks(
-            image, 
-            results.pose_landmarks, 
-            mp_holistic.POSE_CONNECTIONS
-        )
-        
-        # Classify and display the posture
-        if results.pose_landmarks:
-            posture, confidences = classify_posture(results)
-            
-            # Display posture and confidence
-            display_text = f"Posture: {posture}"
-            cv2.putText(
-                image, 
-                display_text, 
-                (10, 30), 
-                cv2.FONT_HERSHEY_SIMPLEX, 
-                1, 
-                (0, 255, 0), 
-                2
-            )
-            
-            # Print detailed confidences (optional)
-            print(f"Posture Confidences: {confidences}")
-        
-        # Display the image
-        cv2.imshow('Namaz Posture Detection', cv2.flip(image, 1))
-        
-        # Exit condition
-        if cv2.waitKey(5) & 0xFF == 27:  # ESC key
+        ret, frame = cap.read()
+        if not ret:
             break
-    
-    # Cleanup
-    holistic.close()
+            
+        # Process frame
+        results = detector.process_frame(frame)
+        
+        # Get landmarks and classify pose
+        landmarks_3d = detector.get_3d_landmarks(results)
+        if landmarks_3d and results.pose_landmarks:
+            current_pose = detector.classify_pose(landmarks_3d)
+            
+            # Draw visualization with debug info
+            frame = draw_visualization(frame, results, current_pose, detector.debug_info)
+        
+        cv2.imshow('Namaz Pose Detection', frame)
+        
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+            
     cap.release()
     cv2.destroyAllWindows()
 

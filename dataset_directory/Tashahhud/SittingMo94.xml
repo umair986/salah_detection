@@ -1,0 +1,26 @@
+<annotation>
+	<folder>rty</folder>
+	<filename>SittingMo94.jpg</filename>
+	<path>/Users/mohandbaras/Desktop/rty/SittingMo94.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>4928</width>
+		<height>3264</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>sitting</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1550</xmin>
+			<ymin>396</ymin>
+			<xmax>3169</xmax>
+			<ymax>2972</ymax>
+		</bndbox>
+	</object>
+</annotation>

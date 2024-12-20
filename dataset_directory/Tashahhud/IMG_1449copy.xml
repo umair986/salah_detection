@@ -1,0 +1,26 @@
+<annotation>
+	<folder>Mo</folder>
+	<filename>IMG_1449 copy.jpg</filename>
+	<path>/Users/saleh/Desktop/sala/Mo/IMG_1449 copy.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>3024</width>
+		<height>4032</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>sitting</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>339</xmin>
+			<ymin>1063</ymin>
+			<xmax>1961</xmax>
+			<ymax>3291</ymax>
+		</bndbox>
+	</object>
+</annotation>

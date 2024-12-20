@@ -1,0 +1,26 @@
+<annotation>
+	<folder>s</folder>
+	<filename>SittingMO55.jpg</filename>
+	<path>/Users/mohandbaras/Desktop/s/SittingMO55.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1920</width>
+		<height>1080</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>sitting</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>317</xmin>
+			<ymin>375</ymin>
+			<xmax>1538</xmax>
+			<ymax>1053</ymax>
+		</bndbox>
+	</object>
+</annotation>

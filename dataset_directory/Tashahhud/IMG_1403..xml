@@ -1,0 +1,26 @@
+<annotation>
+	<folder>Mo</folder>
+	<filename>IMG_1403..jpg</filename>
+	<path>/Users/saleh/Desktop/sala/Mo/IMG_1403..jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>3024</width>
+		<height>4032</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>sitting</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>371</xmin>
+			<ymin>436</ymin>
+			<xmax>2216</xmax>
+			<ymax>3418</ymax>
+		</bndbox>
+	</object>
+</annotation>

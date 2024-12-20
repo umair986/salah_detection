@@ -1,0 +1,26 @@
+<annotation>
+	<folder>a</folder>
+	<filename>19.jpg</filename>
+	<path>/Users/saleh/Desktop/sala/a/19.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1920</width>
+		<height>1080</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>sitting</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>421</xmin>
+			<ymin>257</ymin>
+			<xmax>1788</xmax>
+			<ymax>1050</ymax>
+		</bndbox>
+	</object>
+</annotation>

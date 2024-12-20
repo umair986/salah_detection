@@ -1,0 +1,26 @@
+<annotation>
+	<folder>photo</folder>
+	<filename>Screenshot_20190316-094143_1552725742618-500x400.jpg</filename>
+	<path>/Users/mohandbaras/Desktop/photo/Screenshot_20190316-094143_1552725742618-500x400.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>500</width>
+		<height>400</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>sitting</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>184</xmin>
+			<ymin>118</ymin>
+			<xmax>320</xmax>
+			<ymax>343</ymax>
+		</bndbox>
+	</object>
+</annotation>
