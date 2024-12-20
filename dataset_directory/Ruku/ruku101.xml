@@ -1,0 +1,26 @@
+<annotation>
+	<folder>ruku</folder>
+	<filename>ruku101.png</filename>
+	<path>C:\Users\Administrator\Desktop\ruku\ruku101.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1920</width>
+		<height>1080</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ruku</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>938</xmin>
+			<ymin>185</ymin>
+			<xmax>1480</xmax>
+			<ymax>867</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,26 @@
+<annotation>
+	<folder>ruku</folder>
+	<filename>ruku132.jpeg</filename>
+	<path>C:\Users\Administrator\Desktop\ruku\ruku132.jpeg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>891</width>
+		<height>1280</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>ruku</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>31</xmin>
+			<ymin>375</ymin>
+			<xmax>890</xmax>
+			<ymax>1226</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,26 @@
+<annotation>
+	<folder>drive-download-20191021T140509Z-001</folder>
+	<filename>sujud193.jpg</filename>
+	<path>C:\Users\Abdulrahman Babiker\Documents\Unicrap\Extracurricular Activities\Lob Stof\Data Set\drive-download-20191021T140509Z-001\sujud193.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>299</width>
+		<height>168</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>sujud</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>53</xmin>
+			<ymin>51</ymin>
+			<xmax>173</xmax>
+			<ymax>140</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,26 @@
+<annotation>
+	<folder>photo1</folder>
+	<filename>ioma6.jpg</filename>
+	<path>/Users/mohandbaras/Desktop/photo/photo1/ioma6.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1920</width>
+		<height>1080</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>sitting</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>673</xmin>
+			<ymin>147</ymin>
+			<xmax>1089</xmax>
+			<ymax>976</ymax>
+		</bndbox>
+	</object>
+</annotation>

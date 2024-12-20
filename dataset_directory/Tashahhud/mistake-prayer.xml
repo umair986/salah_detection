@@ -1,0 +1,26 @@
+<annotation>
+	<folder>photo</folder>
+	<filename>mistake-prayer.jpg</filename>
+	<path>/Users/mohandbaras/Desktop/photo/mistake-prayer.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>2500</width>
+		<height>1667</height>
+		<depth>1</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>sitting</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>188</xmin>
+			<ymin>440</ymin>
+			<xmax>945</xmax>
+			<ymax>1463</ymax>
+		</bndbox>
+	</object>
+</annotation>

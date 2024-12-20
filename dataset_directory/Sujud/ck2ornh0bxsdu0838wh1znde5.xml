@@ -1,0 +1,26 @@
+<annotation>
+    <folder>From_Labelbox</folder>
+    <filename>ck2ornh0bxsdu0838wh1znde5.jpeg</filename>
+    <path>/home/riotu/Object Detection/Datasets/Salat/From_Labelbox/ck2ornh0bxsdu0838wh1znde5.jpeg</path>
+    <source>
+        <database>Unknown</database>
+    </source>
+    <size>
+        <width>317</width>
+        <height>159</height>
+        <depth>3</depth>
+    </size>
+    <segmented>0</segmented>
+    <object>
+        <name>sujud</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+                <xmin>81</xmin>
+                <ymin>1</ymin>
+                <xmax>312</xmax>
+                <ymax>128</ymax>
+            </bndbox>
+        </object>
+    </annotation>

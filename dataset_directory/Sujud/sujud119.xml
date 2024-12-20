@@ -1,0 +1,38 @@
+<annotation>
+	<folder>unlabeled_</folder>
+	<filename>sujud119.jpg</filename>
+	<path>C:\Users\Abdulrahman Babiker\Documents\Unicrap\Extracurricular Activities\Lob Stof\Data Set\unlabeled -20191026T172142Z-001\unlabeled_\sujud119.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>320</width>
+		<height>240</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>sujud</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>114</xmin>
+			<ymin>113</ymin>
+			<xmax>160</xmax>
+			<ymax>170</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>sujud</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>159</xmin>
+			<ymin>112</ymin>
+			<xmax>213</xmax>
+			<ymax>167</ymax>
+		</bndbox>
+	</object>
+</annotation>

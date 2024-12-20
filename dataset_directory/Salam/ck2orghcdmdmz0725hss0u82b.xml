@@ -1,0 +1,26 @@
+<annotation>
+    <folder>From_Labelbox</folder>
+    <filename>ck2orghcdmdmz0725hss0u82b.jpeg</filename>
+    <path>/home/riotu/Object Detection/Datasets/Salat/From_Labelbox/ck2orghcdmdmz0725hss0u82b.jpeg</path>
+    <source>
+        <database>Unknown</database>
+    </source>
+    <size>
+        <width>4928</width>
+        <height>3264</height>
+        <depth>3</depth>
+    </size>
+    <segmented>0</segmented>
+    <object>
+        <name>julus</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+                <xmin>1677</xmin>
+                <ymin>417</ymin>
+                <xmax>3219</xmax>
+                <ymax>2936</ymax>
+            </bndbox>
+        </object>
+    </annotation>

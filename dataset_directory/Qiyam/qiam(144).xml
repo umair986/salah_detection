@@ -1,0 +1,26 @@
+<annotation>
+	<folder>images</folder>
+	<filename>qiam (144).jpg</filename>
+	<path>D:\psu\salah\vids to images\images\qiam (144).jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>480</width>
+		<height>360</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>qiyam</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>155</xmin>
+			<ymin>88</ymin>
+			<xmax>243</xmax>
+			<ymax>337</ymax>
+		</bndbox>
+	</object>
+</annotation>

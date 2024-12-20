@@ -1,0 +1,26 @@
+<annotation>
+	<folder>sujud</folder>
+	<filename>img49.jpg</filename>
+	<path>C:\Users\Abdulrahman Babiker\Documents\Unicrap\Extracurricular Activities\Lob Stof\Data Set\Sujud Data Set\sujud\img49.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>276</width>
+		<height>183</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>Sujud</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>66</xmin>
+			<ymin>19</ymin>
+			<xmax>220</xmax>
+			<ymax>131</ymax>
+		</bndbox>
+	</object>
+</annotation>
